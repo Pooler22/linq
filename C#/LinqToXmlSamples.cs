@@ -5,7 +5,6 @@
 //Copyright (C) Microsoft Corporation.  All rights reserved.
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -16,10 +15,12 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 
-namespace SampleQueries {
+namespace SampleQueries
+{
     [Title("101+ Linq To Xml Query Samples")]
     [Prefix("XLinq")]
-    public class LinqToXmlSamples : SampleHarness {
+    public class LinqToXmlSamples : SampleHarness
+    {
         public string dataPath = Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\..\Data\"));
 
         [Category("Lab1")]
@@ -27,13 +28,11 @@ namespace SampleQueries {
         [Description("nazwy i miasta klientów nie posiadających nr faksu")]
         public void XLinqP1()
         {
-            XDocument customers = XDocument.Load(dataPath + "Customers.xml");
+            var customers = XDocument.Load(dataPath + "Customers.xml");
 
-            var query =
-                from customer in customers.Descendants("customers").Descendants("customer")
-                where customer.Element("fax") == null
-                select new { name = customer.Element("name").Value , country =  customer.Element("country").Value };
-            foreach (var result in query)
+            foreach (var result in from customer in customers.Descendants("customers").Descendants("customer")
+                                   where customer.Element("fax") == null
+                                   select new { name = customer.Element("name")?.Value, country = customer.Element("country")?.Value })
                 Console.WriteLine(result);
         }
 
@@ -42,14 +41,15 @@ namespace SampleQueries {
         [Description("miasta wraz z liczbą klientów w kolejności malejące")]
         public void XLinqP2()
         {
-            XDocument doc = XDocument.Load(dataPath + "bib.xml");
+            var doc = XDocument.Load(dataPath + "bib.xml");
             Console.WriteLine(doc);
         }
 
         [Category("Load")]
         [Title("Load document from file")]
         [Description("Load an XML document from a file")]
-        public void XLinq1() {
+        public void XLinq1()
+        {
             XDocument doc = XDocument.Load(dataPath + "bib.xml");
             Console.WriteLine(doc);
         }
@@ -57,7 +57,8 @@ namespace SampleQueries {
         [Category("Load")]
         [Title("Load document from string")]
         [Description("Load document from string")]
-        public void XLinq2() {
+        public void XLinq2()
+        {
             string xml = "<book price='100' isbn='1002310'>" +
                             "<title>XClarity Samples</title>" +
                             "<author>Matt</author>" +
@@ -71,7 +72,8 @@ namespace SampleQueries {
         [Category("Load")]
         [Title("Load document from XmlReader")]
         [Description("Load an XML document from XmlReader")]
-        public void XLinq3() {
+        public void XLinq3()
+        {
             XmlReader reader = XmlReader.Create(dataPath + "bib.xml");
             XDocument doc = XDocument.Load(reader);
             Console.WriteLine(doc);
@@ -81,7 +83,8 @@ namespace SampleQueries {
         [Category("Load")]
         [Title("Element from XmlReader - 1")]
         [Description("Construct XElement from XmlReader positioned on an element")]
-        public void XLinq4() {
+        public void XLinq4()
+        {
             XmlReader reader = XmlReader.Create(dataPath + "nw_customers.xml");
             reader.Read();//move to root
             reader.Read(); // move to fist customer
@@ -93,7 +96,8 @@ namespace SampleQueries {
         [Category("Load")]
         [Title("Element from XmlReader - 2")]
         [Description("Read XElement content from XmlReader")]
-        public void XLinq5() {
+        public void XLinq5()
+        {
             XmlReader reader = XmlReader.Create(dataPath + "config.xml");
             //the file has comments and whitespace at the start
             reader.Read();
@@ -109,7 +113,8 @@ namespace SampleQueries {
         [Category("Construction")]
         [Title("Construct an XElement from string")]
         [Description("Construct an XElement from string")]
-        public void XLinq6() {
+        public void XLinq6()
+        {
             string xml = "<purchaseOrder price='100'>" +
                             "<item price='50'>Motor</item>" +
                             "<item price='50'>Cable</item>" +
@@ -122,7 +127,8 @@ namespace SampleQueries {
         [Category("Construction")]
         [Title("Add XML declaration to a document")]
         [Description("Add XML declaration to a document")]
-        public void XLinq7() {
+        public void XLinq7()
+        {
             XDocument doc = new XDocument(new XDeclaration("1.0", "UTF-16", "Yes"),
                                           new XElement("foo"));
             StringWriter sw = new StringWriter();
@@ -134,7 +140,8 @@ namespace SampleQueries {
         [Category("Construction")]
         [Title("Computed element name")]
         [Description("Computed element name")]
-        public void XLinq8() {
+        public void XLinq8()
+        {
             XDocument customers = XDocument.Load(dataPath + "nw_customers.xml");
             string name = (string)customers.Elements("Root")
                                            .Elements("Customers")
@@ -148,7 +155,8 @@ namespace SampleQueries {
         [Category("Construction")]
         [Title("Document creation")]
         [Description("Create a simple config file")]
-        public void XLinq9() {
+        public void XLinq9()
+        {
             XDocument myDocument =
             new XDocument(
               new XElement("configuration",
@@ -221,7 +229,8 @@ namespace SampleQueries {
         [Category("Construction")]
         [Title("Create an XmlSchema")]
         [Description("Create an XmlSchema")]
-        public void XLinq10() {
+        public void XLinq10()
+        {
             XNamespace XSD = "http://www.w3.org/2001/XMLSchema";
             XNamespace SQL = "urn:schemas-microsoft-com:mapping-schema";
             XElement result =
@@ -293,7 +302,8 @@ namespace SampleQueries {
         [Category("Construction")]
         [Title("Construct a PI")]
         [Description("Create an XML document with an XSLT PI")]
-        public void XLinq11() {
+        public void XLinq11()
+        {
             XDocument result = new XDocument(
                                 new XProcessingInstruction("xml-stylesheet",
                                                            "type='text/xsl' href='diff.xsl'"),
@@ -304,7 +314,8 @@ namespace SampleQueries {
         [Category("Construction")]
         [Title("XML comment construction")]
         [Description("XML comment construction")]
-        public void XLinq12() {
+        public void XLinq12()
+        {
             XDocument result =
               new XDocument(
                 new XComment("My phone book"),
@@ -335,7 +346,8 @@ namespace SampleQueries {
         [Category("Construction")]
         [Title("Create a CData section")]
         [Description("Create a CData section")]
-        public void XLinq13() {
+        public void XLinq13()
+        {
             XElement e = new XElement("Dump",
                           new XCData("<dump>this is some xml</dump>"),
                           new XText("some other text"));
@@ -347,7 +359,8 @@ namespace SampleQueries {
         [Category("Construction")]
         [Title("Create a sequence of nodes")]
         [Description("Create a sequence of customer elements")]
-        public void XLinq14() {
+        public void XLinq14()
+        {
             var cSequence = new[] {
                     new XElement("customer",
                                  new XAttribute("id","x"),"new customer"),
@@ -363,7 +376,8 @@ namespace SampleQueries {
         [Category("Write")]
         [Title("Write an XElement to XmlWriter")]
         [Description("Write an XElement to XmlWriter using the WriteTo method")]
-        public void XLinq15() {
+        public void XLinq15()
+        {
             XElement po1 = new XElement("PurchaseOrder",
                             new XElement("Item", "Motor",
                               new XAttribute("price", "100")));
@@ -395,7 +409,8 @@ namespace SampleQueries {
         [Category("Write")]
         [Title("Write the content of an XDocument to XmlWriter")]
         [Description("Write the content of XDocument to XmlWriter using the WriteTo method")]
-        public void XLinq16() {
+        public void XLinq16()
+        {
             XDocument doc1 = new XDocument(
               new XElement("PurchaseOrders",
                 new XElement("PurchaseOrder",
@@ -428,7 +443,8 @@ namespace SampleQueries {
         [Category("Write")]
         [Title("Save XDocument")]
         [Description("Save XDocument using XmlWriter/TextWriter/File")]
-        public void XLinq17() {
+        public void XLinq17()
+        {
             XDocument doc = new XDocument(
                 new XElement("PurchaseOrders",
                     new XElement("PurchaseOrder",
@@ -461,7 +477,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Query for child elements")]
         [Description("Select all the customers in the xml document")]
-        public void XLinq18() {
+        public void XLinq18()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             foreach (XElement result in doc.Elements("Root")
                                            .Elements("Customers"))
@@ -472,7 +489,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Query for all child elements")]
         [Description("Select all the child elements of the first customer")]
-        public void XLinq19() {
+        public void XLinq19()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             var query = doc.Element("Root")
                            .Element("Customers")
@@ -484,7 +502,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Query for first child element - 1")]
         [Description("Select the first customer in the document")]
-        public void XLinq20() {
+        public void XLinq20()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             var result = doc.Element("Root")
                             .Element("Customers");
@@ -494,7 +513,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Query for first child element - 2")]
         [Description("Query for one child element on a sequence of elements")]
-        public void XLinq21() {
+        public void XLinq21()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             var result = doc.Elements()
                             .Elements("Customers")
@@ -506,7 +526,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Query for attributes")]
         [Description("Selects all the CustomerIDs in the xml document")]
-        public void XLinq22() {
+        public void XLinq22()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             var query = doc.Element("Root")
                            .Elements("Customers")
@@ -519,7 +540,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Cast an attribute to a number")]
         [Description("Find orders with price > 100")]
-        public void XLinq23() {
+        public void XLinq23()
+        {
             string xml = "<order >" +
                             "<item price='150'>Motor</item>" +
                             "<item price='50'>Cable</item>" +
@@ -543,7 +565,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Get the root element of a document")]
         [Description("Get the root element of a document")]
-        public void XLinq24() {
+        public void XLinq24()
+        {
             XElement root = XDocument.Load(dataPath + "config.xml")
                                      .Root;
             Console.WriteLine("Name of root element is {0}", root.Name);
@@ -552,7 +575,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Filter query results using where")]
         [Description("Filter query results using where")]
-        public void XLinq25() {
+        public void XLinq25()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             var query =
                     from
@@ -571,7 +595,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Select all descendants of an element")]
         [Description("Select all ContactName elements in the document")]
-        public void XLinq26() {
+        public void XLinq26()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             var query = doc.Descendants("ContactName");
             foreach (XElement result in query)
@@ -581,7 +606,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Select all descendants of a given type")]
         [Description("Select all text in the document")]
-        public void XLinq27() {
+        public void XLinq27()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             var query = doc.DescendantNodes().OfType<XText>().Select(t => t.Value);
             foreach (string result in query)
@@ -591,7 +617,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Select all ancestors")]
         [Description("Check if two nodes belong to the same document")]
-        public void XLinq28() {
+        public void XLinq28()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             XElement element1 = doc.Element("Root");
             XElement element2 = doc.Descendants("Customers")
@@ -606,7 +633,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Query for parent")]
         [Description("Query for parent of an Element")]
-        public void XLinq29() {
+        public void XLinq29()
+        {
             XElement item = new XElement("item-01",
                                          "Computer");
             XElement order = new XElement("order", item);
@@ -617,7 +645,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Join over two sequences")]
         [Description("Add customer company info to orders of the first customer")]
-        public void XLinq30() {
+        public void XLinq30()
+        {
             XDocument customers = XDocument.Load(dataPath + "nw_customers.xml");
             XDocument orders = XDocument.Load(dataPath + "nw_orders.xml");
 
@@ -639,7 +668,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Query content of a type")]
         [Description("Query content of a given type of an existing element")]
-        public void XLinq31() {
+        public void XLinq31()
+        {
             XElement elem =
               new XElement("customer",
                            new XElement("name",
@@ -669,7 +699,8 @@ namespace SampleQueries {
         [LinkedMethod("GetSwedishFreightProfile")]
         [LinkedMethod("GetSwedishCustomerOrders")]
         [LinkedMethod("AddNewOrder")]
-        public void XLinq32() {
+        public void XLinq32()
+        {
             XDocument customers = XDocument.Load(dataPath + "nw_customers.xml");
             XDocument orders = XDocument.Load(dataPath + "nw_orders.xml");
             XStreamingElement summary = new XStreamingElement("Summary",
@@ -684,7 +715,8 @@ namespace SampleQueries {
             Console.WriteLine(summary);
         }
 
-        static void AddNewOrder(XDocument orders) {
+        static void AddNewOrder(XDocument orders)
+        {
             string order = @"<Orders>
                                    <CustomerID>BERGS</CustomerID>
                                    <ShipInfo ShippedDate='1997-12-09T00:00:00'>
@@ -696,7 +728,8 @@ namespace SampleQueries {
             orders.Root.Add(newOrder);
         }
 
-        private static IEnumerable<XElement> GetSwedishFreightProfile(XDocument orders) {
+        private static IEnumerable<XElement> GetSwedishFreightProfile(XDocument orders)
+        {
             return
                from
                 order in orders.Descendants("Orders")
@@ -710,7 +743,8 @@ namespace SampleQueries {
 
         }
 
-        private static IEnumerable<XElement> GetSwedishCustomerOrders(XDocument customers, XDocument orders) {
+        private static IEnumerable<XElement> GetSwedishCustomerOrders(XDocument customers, XDocument orders)
+        {
             return
                from
                 customer in customers.Descendants("Customers")
@@ -733,7 +767,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Positional predicate")]
         [Description("Query the 3rd customer in the document")]
-        public void XLinq33() {
+        public void XLinq33()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             var c = doc.Descendants("Customers")
                        .ElementAt(2);
@@ -743,7 +778,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Union two sequences of nodes")]
         [Description("Union books authored by two authors: Serge and Peter")]
-        public void XLinq34() {
+        public void XLinq34()
+        {
             XDocument doc = XDocument.Load(dataPath + "bib.xml");
             var b1 = doc.Descendants("book")
                         .Where(b => b.Elements("author")
@@ -761,7 +797,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Intersect two sequences of nodes")]
         [Description("Intersect books that are common for both authors")]
-        public void XLinq35() {
+        public void XLinq35()
+        {
             XDocument doc = XDocument.Load(dataPath + "bib.xml");
             var b1 = doc.Descendants("book")
                         .Where(b => b.Elements("author")
@@ -779,7 +816,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("All nodes in sequence 1 except the nodes in sequence 2")]
         [Description("Find books that are authored by Peter and did not have Serge as co-author")]
-        public void XLinq36() {
+        public void XLinq36()
+        {
             XDocument doc = XDocument.Load(dataPath + "bib.xml");
             var b1 = doc.Descendants("book")
                         .Where(b => b.Elements("author")
@@ -798,14 +836,16 @@ namespace SampleQueries {
         [Title("Reverse the order of nodes in a sequence")]
         [Description("Display the path to a node")]
         [LinkedMethod("PrintPath")]
-        public void XLinq37() {
+        public void XLinq37()
+        {
             XDocument doc = XDocument.Load(dataPath + "bib.xml");
             XElement e = doc.Descendants("last")
                             .First();
             PrintPath(e);
         }
 
-        static void PrintPath(XElement e) {
+        static void PrintPath(XElement e)
+        {
             var nodes = e.AncestorsAndSelf()
                             .Reverse();
             foreach (var n in nodes)
@@ -817,7 +857,8 @@ namespace SampleQueries {
         [Title("Equality of sequences")]
         [Description("Check if 2 sequences of nodes are equal. " +
                      "Did Serge and peter co-author all of their the books?")]
-        public void XLinq38() {
+        public void XLinq38()
+        {
             XDocument doc = XDocument.Load(dataPath + "bib.xml");
             var b1 = doc.Descendants("book")
                         .Where(b => b.Elements("author")
@@ -835,7 +876,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("TakeWhile operator")]
         [Description("List books until total price is less that $150")]
-        public void XLinq39() {
+        public void XLinq39()
+        {
             XDocument doc = XDocument.Load(dataPath + "bib.xml");
             double sum = 0;
             var query = doc.Descendants("book")
@@ -847,7 +889,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Create a list of numbers")]
         [Description("Create 5 new customers with different IDs")]
-        public void XLinq40() {
+        public void XLinq40()
+        {
             var query = from
                            i in Enumerable.Range(1, 5)
                         select
@@ -861,7 +904,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Repeat operator")]
         [Description("Initialize new orders with items")]
-        public void XLinq41() {
+        public void XLinq41()
+        {
             var orders = new XElement[] {
                 new XElement("order", new XAttribute("itemCount",5)),
                 new XElement("order", new XAttribute("itemCount",2)),
@@ -880,7 +924,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Any operator")]
         [Description("Check if there are any customers in Argentina")]
-        public void XLinq42() {
+        public void XLinq42()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_Customers.xml");
             if (doc.Descendants("Country").Any(c => (string)c == "Argentina"))
                 Console.WriteLine("There are cusotmers in Argentina");
@@ -891,7 +936,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("All operator")]
         [Description("Check if all books have at least one author")]
-        public void XLinq43() {
+        public void XLinq43()
+        {
             XDocument doc = XDocument.Load(dataPath + "bib.xml");
             bool query = doc.Descendants("book")
                             .All(b => b.Descendants("author").Count() > 0);
@@ -904,7 +950,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Count operartor")]
         [Description("Find the number of orders for a customer")]
-        public void XLinq44() {
+        public void XLinq44()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_Orders.xml");
             var query = doc.Descendants("Orders")
                            .Where(o => (string)o.Element("CustomerID") == "VINET");
@@ -915,7 +962,8 @@ namespace SampleQueries {
         [Title("Aggregate operator")]
         [Description("Find tax on an order")]
         [LinkedMethod("Tax")]
-        public void XLinq45() {
+        public void XLinq45()
+        {
             string xml = "<order >" +
                             "<item price='150'>Motor</item>" +
                             "<item price='50'>Cable</item>" +
@@ -928,14 +976,16 @@ namespace SampleQueries {
             Console.WriteLine("The total tax on the order @10% is ${0}", tax);
 
         }
-        static double Tax(double seed, XElement item) {
+        static double Tax(double seed, XElement item)
+        {
             return seed + (double)item.Attribute("price") * 0.1;
         }
 
         [Category("Query")]
         [Title("Distinct operator")]
         [Description("Find all the countries where there is a customer")]
-        public void XLinq46() {
+        public void XLinq46()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_Customers.xml");
             var countries = doc.Descendants("Country")
                                .Select(c => (string)c)
@@ -948,7 +998,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Concat operator")]
         [Description("List all books by Serge and Peter with co-authored books repeated")]
-        public void XLinq47() {
+        public void XLinq47()
+        {
             XDocument doc = XDocument.Load(dataPath + "bib.xml");
             var b1 = doc.Descendants("book")
                         .Where(b => b.Elements("author")
@@ -966,7 +1017,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Take operator")]
         [Description("Query the first two customers")]
-        public void XLinq48() {
+        public void XLinq48()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_Customers.xml");
             var customers = doc.Descendants("Customers").Take(2);
             foreach (var c in customers)
@@ -976,7 +1028,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Skip operator")]
         [Description("Skip the first 3 books")]
-        public void XLinq49() {
+        public void XLinq49()
+        {
             XDocument doc = XDocument.Load(dataPath + "bib.xml");
             var books = doc.Descendants("book").Skip(3);
             foreach (var b in books)
@@ -986,7 +1039,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Skip nodes based on a condition")]
         [Description("Print items that dont fit in budget")]
-        public void XLinq50() {
+        public void XLinq50()
+        {
             string xml = "<order >" +
                             "<item price='150'>Motor</item>" +
                             "<item price='50'>Cable</item>" +
@@ -1006,7 +1060,8 @@ namespace SampleQueries {
         [Title("SelectMany operator")]
         [Description("Get all books authored by Serge and Peter")]
         [LinkedMethod("GetBooks")]
-        public void XLinq51() {
+        public void XLinq51()
+        {
             string[] authors = { "Serge", "Peter" };
             var books = authors.SelectMany(a => GetBooks(a));
             foreach (var b in books)
@@ -1014,7 +1069,8 @@ namespace SampleQueries {
 
         }
 
-        public IEnumerable<XElement> GetBooks(string author) {
+        public IEnumerable<XElement> GetBooks(string author)
+        {
             XDocument doc = XDocument.Load(dataPath + "bib.xml");
             var query = doc.Descendants("book")
                             .Where(b => b.Elements("author")
@@ -1027,7 +1083,8 @@ namespace SampleQueries {
         [Category("Query")]
         [Title("Container document")]
         [Description("Find the container document of an element")]
-        public void XLinq52() {
+        public void XLinq52()
+        {
             XElement c = XDocument.Load(dataPath + "bib.xml").Descendants("book").First();
             XDocument container = c.Document;
             Console.WriteLine(container);
@@ -1036,7 +1093,8 @@ namespace SampleQueries {
         [Category("Grouping")]
         [Title("Group orders by customer")]
         [Description("Group orders by customer")]
-        public void XLinq53() {
+        public void XLinq53()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_orders.xml");
             var query =
                 from
@@ -1052,7 +1110,8 @@ namespace SampleQueries {
         [Category("Grouping")]
         [Title("Group customers by country and city")]
         [Description("Create a directory of customers grouped by country and city")]
-        public void XLinq54() {
+        public void XLinq54()
+        {
             XDocument customers = XDocument.Load(dataPath + "nw_customers.xml");
             XElement directory =
              new XElement("directory",
@@ -1084,7 +1143,8 @@ namespace SampleQueries {
         [Category("Grouping")]
         [Title("Group orders by customer")]
         [Description("Group orders by customer and return all customers (+ orders) for customers who have more than 25 orders ")]
-        public void XLinq55() {
+        public void XLinq55()
+        {
             XDocument customers = XDocument.Load(dataPath + "nw_customers.xml");
             XDocument orders = XDocument.Load(dataPath + "nw_orders.xml");
             XElement custOrder = new XElement("CustomerOrders",
@@ -1111,7 +1171,8 @@ namespace SampleQueries {
         [Category("Sort")]
         [Title("Sort customers by name")]
         [Description("Sort customers by name in ascending order")]
-        public void XLinq56() {
+        public void XLinq56()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             var query =
                 from
@@ -1128,7 +1189,8 @@ namespace SampleQueries {
         [Category("Sort")]
         [Title("Sort orders by date")]
         [Description("Sort orders by date in ascending order")]
-        public void XLinq57() {
+        public void XLinq57()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_orders.xml");
             var query =
                 from order in doc.Descendants("Orders")
@@ -1148,7 +1210,8 @@ namespace SampleQueries {
         [Category("Sort")]
         [Title("Descending order")]
         [Description("Sort customers by name in descending order")]
-        public void XLinq58() {
+        public void XLinq58()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_Customers.xml");
             var query =
                 from
@@ -1165,7 +1228,8 @@ namespace SampleQueries {
         [Category("Sort")]
         [Title("Multiple sort keys")]
         [Description("Sort customers by country and city")]
-        public void XLinq59() {
+        public void XLinq59()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_Customers.xml");
             var query =
                 from
@@ -1182,7 +1246,8 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Add an element as the last child")]
         [Description("Add an element as the last child")]
-        public void XLinq60() {
+        public void XLinq60()
+        {
             XDocument doc = XDocument.Load(dataPath + "config.xml");
             XElement config = doc.Element("config");
             config.Add(new XElement("logFolder", "c:\\log"));
@@ -1193,7 +1258,8 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Add an element as the first child")]
         [Description("Add an element as the first child")]
-        public void XLinq61() {
+        public void XLinq61()
+        {
             XDocument doc = XDocument.Load(dataPath + "config.xml");
             XElement config = doc.Element("config");
             config.AddFirst(new XElement("logFolder", "c:\\log"));
@@ -1204,13 +1270,14 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Add multiple elements as children")]
         [Description("Add multiple elements as children")]
-        public void XLinq62() {
+        public void XLinq62()
+        {
             XDocument doc = XDocument.Load(dataPath + "config.xml");
-            XElement[] first = { 
-                new XElement("logFolder", "c:\\log"), 
+            XElement[] first = {
+                new XElement("logFolder", "c:\\log"),
                 new XElement("resultsFolders", "c:\\results")};
-            XElement[] last = { 
-                new XElement("mode", "client"), 
+            XElement[] last = {
+                new XElement("mode", "client"),
                 new XElement("commPort", "2")};
             XElement config = doc.Element("config");
             config.AddFirst(first);
@@ -1222,7 +1289,8 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Add an attribute to an element")]
         [Description("Add an attribute to an element")]
-        public void XLinq63() {
+        public void XLinq63()
+        {
             XElement elem = new XElement("customer",
                                          "this is an XElement",
                                          new XAttribute("id", "abc"));
@@ -1236,15 +1304,16 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Add content to an existing element")]
         [Description("Add attributes and elements")]
-        public void XLinq64() {
+        public void XLinq64()
+        {
             XElement elem = new XElement("customer",
                                          "this is an XElement",
                                          new XAttribute("id", "abc"));
             Console.WriteLine("Original element {0}", elem);
 
-            object[] additionalContent = { 
-                new XElement("phone", "555-555-5555"), 
-                new XComment("new customer"), 
+            object[] additionalContent = {
+                new XElement("phone", "555-555-5555"),
+                new XComment("new customer"),
                 new XAttribute("name", "Jack")};
 
             elem.Add(additionalContent);
@@ -1254,7 +1323,8 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Replace content of a container (element or document")]
         [Description("Replace content to an existing element")]
-        public void XLinq65() {
+        public void XLinq65()
+        {
             XElement elem = new XElement("customer",
                                          "this is an XElement",
                                          new XAttribute("id", "abc"));
@@ -1263,10 +1333,10 @@ namespace SampleQueries {
             elem.ReplaceNodes("this is a coustomer element");
             Console.WriteLine("Updated element {0}", elem);
 
-            object[] newContent = { 
-                "this is a customer element", 
-                new XElement("phone", "555-555-5555"), 
-                new XComment("new customer"), 
+            object[] newContent = {
+                "this is a customer element",
+                new XElement("phone", "555-555-5555"),
+                new XComment("new customer"),
                 new XAttribute("name", "Jack") };
 
             elem.ReplaceNodes(newContent);
@@ -1277,7 +1347,8 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Remove content of an element")]
         [Description("Remove content of an element")]
-        public void XLinq66() {
+        public void XLinq66()
+        {
             XElement elem = new XElement("customer",
                                          "this is an XElement",
                                          new XAttribute("id", "abc"));
@@ -1291,7 +1362,8 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Remove all content")]
         [Description("Remove all content and attributes of an element")]
-        public void XLinq67() {
+        public void XLinq67()
+        {
             XElement elem = new XElement("customer",
                                          new XElement("name", "jack"),
                                          "this is an XElement",
@@ -1306,7 +1378,8 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Remove all attributes")]
         [Description("Remove all attributes of an element")]
-        public void XLinq68() {
+        public void XLinq68()
+        {
             XElement elem = new XElement("customer",
                                          new XAttribute("name", "jack"),
                                          "this is an XElement",
@@ -1322,7 +1395,8 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Remove an attribute of an element")]
         [Description("Remove an attribute of an element")]
-        public void XLinq69() {
+        public void XLinq69()
+        {
             XElement elem = new XElement("customer",
                                          new XAttribute("name", "jack"),
                                          "this is an XElement",
@@ -1338,7 +1412,8 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Update an attribute")]
         [Description("Update the value of an attribute")]
-        public void XLinq70() {
+        public void XLinq70()
+        {
             XElement elem = new XElement("customer",
                                          new XAttribute("name", "jack"),
                                          "this is an XElement",
@@ -1355,7 +1430,8 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Delete an element by name")]
         [Description("Remove a child element by name")]
-        public void XLinq71() {
+        public void XLinq71()
+        {
             XElement elem = new XElement("customer",
                                          new XElement("name", "jack"),
                                          "this is an XElement",
@@ -1370,7 +1446,8 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Update a child element by name")]
         [Description("Update a child element by name")]
-        public void XLinq72() {
+        public void XLinq72()
+        {
             XElement elem = new XElement("customer",
                                          new XElement("name", "jack"),
                                          "this is an XElement",
@@ -1385,7 +1462,8 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Remove a list of elements")]
         [Description("Remove a list of elements")]
-        public void XLinq73() {
+        public void XLinq73()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             var elems = doc.Descendants("Customers");
             Console.WriteLine("Before count {0}", elems.Count());
@@ -1397,7 +1475,8 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Remove a list of attributes")]
         [Description("Remove a list of attributes")]
-        public void XLinq74() {
+        public void XLinq74()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             var attrs = doc.Descendants("Customers")
                            .Attributes();
@@ -1411,7 +1490,8 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Add an un-parented element to an element")]
         [Description("Add an un-parented element to an element")]
-        public void XLinq75() {
+        public void XLinq75()
+        {
             XElement e = new XElement("foo",
                                       "this is an element");
             Console.WriteLine("Parent : " +
@@ -1425,7 +1505,8 @@ namespace SampleQueries {
         [Category("DML")]
         [Title("Add an parented element to a document")]
         [Description("Adding a parented element to another container clones it")]
-        public void XLinq76() {
+        public void XLinq76()
+        {
             XElement e = new XElement("foo",
                                       "this is an element");
             XElement p1 = new XElement("p1", e);
@@ -1438,10 +1519,11 @@ namespace SampleQueries {
         [Category("Transform")]
         [Title("Create a table of customers")]
         [Description("Generate html with a list of customers that is numbered")]
-        public void XLinq77() {
+        public void XLinq77()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
 
-            var header = new[]{                 
+            var header = new[]{
                     new XElement("th","#"),
                     new XElement("th",
                                  "customer id"),
@@ -1472,7 +1554,8 @@ namespace SampleQueries {
         [Title("Create html tables of books")]
         [Description("Generate a html tables of books by authors")]
         [LinkedMethod("GetBooksTable")]
-        public void XLinq78() {
+        public void XLinq78()
+        {
             XDocument doc = XDocument.Load(dataPath + "bib.xml");
             var content =
                 from b in doc.Descendants("book")
@@ -1488,9 +1571,10 @@ namespace SampleQueries {
             Console.WriteLine(result);
         }
 
-        static XElement GetBooksTable(IEnumerable<XElement> books) {
+        static XElement GetBooksTable(IEnumerable<XElement> books)
+        {
             var header = new XElement[]{
-                            new XElement("th","Title"), 
+                            new XElement("th","Title"),
                             new XElement("th", "Year")};
             var rows =
                 from
@@ -1512,7 +1596,8 @@ namespace SampleQueries {
         [Description("Find all orders for customers in a List")]
         [LinkedMethod("SomeMethodToGetCustomers")]
         [LinkedClass("Customer")]
-        public void XLinq79() {
+        public void XLinq79()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_orders.xml");
             List<Customer> customers = SomeMethodToGetCustomers();
             var result =
@@ -1527,11 +1612,13 @@ namespace SampleQueries {
                                     tuple.custid, tuple.orderdate);
 
         }
-        class Customer {
+        class Customer
+        {
             public Customer(string id) { this.id = id; }
             public string id;
         }
-        static List<Customer> SomeMethodToGetCustomers() {
+        static List<Customer> SomeMethodToGetCustomers()
+        {
             List<Customer> customers = new List<Customer>();
             customers.Add(new Customer("VINET"));
             customers.Add(new Customer("TOMSP"));
@@ -1543,7 +1630,8 @@ namespace SampleQueries {
         [Description("Find sum of items in a shopping cart")]
         [LinkedMethod("GetShoppingCart")]
         [LinkedClass("Item")]
-        public void XLinq80() {
+        public void XLinq80()
+        {
             XDocument doc = XDocument.Load(dataPath + "inventory.xml");
             List<Item> cart = GetShoppingCart();
             var subtotal =
@@ -1553,15 +1641,18 @@ namespace SampleQueries {
                 select (double)item.quantity * (double)inventory.Element("price");
             Console.WriteLine("Total payment = {0}", subtotal.Sum());
         }
-        class Item {
-            public Item(string id, int quantity) {
+        class Item
+        {
+            public Item(string id, int quantity)
+            {
                 this.id = id;
                 this.quantity = quantity;
             }
             public int quantity;
             public string id;
         }
-        static List<Item> GetShoppingCart() {
+        static List<Item> GetShoppingCart()
+        {
             List<Item> items = new List<Item>();
             items.Add(new Item("1", 10));
             items.Add(new Item("5", 5));
@@ -1572,7 +1663,8 @@ namespace SampleQueries {
         [Title("Consume a config file")]
         [Description("Load and use a config file")]
         [LinkedMethod("Initialize")]
-        public void XLinq81() {
+        public void XLinq81()
+        {
             XElement config = XDocument.Load(dataPath + "config.xml").Element("config");
             Initialize((string)config.Element("rootFolder"),
                        (int)config.Element("iterations"),
@@ -1580,7 +1672,8 @@ namespace SampleQueries {
                        (string)config.Element("tempFolder"));
 
         }
-        static void Initialize(string root, int iter, double mem, string temp) {
+        static void Initialize(string root, int iter, double mem, string temp)
+        {
             Console.WriteLine("Application initialized to root folder: " +
                               "{0}, iterations: {1}, max memory {2}, temp folder: {3}",
                               root, iter, Convert.ToString(mem, CultureInfo.InvariantCulture), temp);
@@ -1589,7 +1682,8 @@ namespace SampleQueries {
         [Category("Language Integration")]
         [Title("Convert a Sequence of nodes to Array")]
         [Description("Convert a Sequence of nodes to Array")]
-        public void XLinq82() {
+        public void XLinq82()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_Customers.xml");
             XElement[] custArray = doc.Descendants("Customers").ToArray();
             foreach (var c in custArray)
@@ -1599,7 +1693,8 @@ namespace SampleQueries {
         [Category("Language Integration")]
         [Title("Convert a Sequence of nodes to List")]
         [Description("Convert a Sequence of nodes to List")]
-        public void XLinq83() {
+        public void XLinq83()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_Customers.xml");
             List<XElement> clist = doc.Descendants("Customers").ToList();
             foreach (var c in clist)
@@ -1609,7 +1704,8 @@ namespace SampleQueries {
         [Category("Language Integration")]
         [Title("Create a dictionary of customers")]
         [Description("Create a dictionary of customers")]
-        public void XLinq84() {
+        public void XLinq84()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_Customers.xml");
             var dictionary = doc.Descendants("Customers")
                                 .ToDictionary(c => (string)c.Attribute("CustomerID"));
@@ -1620,7 +1716,8 @@ namespace SampleQueries {
         [Category("Language Integration")]
         [Title("Using anonnymous types ")]
         [Description("Number all the countries and list them")]
-        public void XLinq85() {
+        public void XLinq85()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_Customers.xml");
             var countries = doc.Descendants("Country")
                                 .Select(c => (string)c)
@@ -1634,7 +1731,8 @@ namespace SampleQueries {
         [Category("XName")]
         [Title("Create elements and attributes in a namespace")]
         [Description("Create elements and attributes in a namespace")]
-        public void XLinq86() {
+        public void XLinq86()
+        {
             XNamespace ns = "http://myNamespace";
             XElement result = new XElement(ns + "foo",
                                            new XAttribute(ns + "bar", "attribute"));
@@ -1644,7 +1742,8 @@ namespace SampleQueries {
         [Category("XName")]
         [Title("Query for elements in a namespace")]
         [Description("Find xsd:element with name=FullAddress")]
-        public void XLinq87() {
+        public void XLinq87()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xsd");
             XNamespace XSD = "http://www.w3.org/2001/XMLSchema";
             XElement result = doc.Descendants(XSD + "element")
@@ -1656,7 +1755,8 @@ namespace SampleQueries {
         [Category("XName")]
         [Title("Create a namespace prefix declaration")]
         [Description("Create a namespace prefix declaration")]
-        public void XLinq88() {
+        public void XLinq88()
+        {
             XNamespace myNS = "http://myNamespace";
             XElement result = new XElement("myElement",
                                            new XAttribute(XNamespace.Xmlns + "myPrefix", myNS));
@@ -1666,7 +1766,8 @@ namespace SampleQueries {
         [Category("XName")]
         [Title("Local-name and namespace")]
         [Description("Get the local-name and namespace of an element")]
-        public void XLinq89() {
+        public void XLinq89()
+        {
             XNamespace ns = "http://myNamespace";
             XElement e = new XElement(ns + "foo");
 
@@ -1678,7 +1779,8 @@ namespace SampleQueries {
         [Category("Misc")]
         [Title("Get the outer XML of a node")]
         [Description("Get the outer XML of a node")]
-        public void XLinq90() {
+        public void XLinq90()
+        {
             string xml = "<order >" +
                             "<item price='150'>Motor</item>" +
                             "<item price='50'>Cable</item>" +
@@ -1693,7 +1795,8 @@ namespace SampleQueries {
         [Category("Misc")]
         [Title("Get the inner text of a node")]
         [Description("Get the inner text of a node")]
-        public void XLinq91() {
+        public void XLinq91()
+        {
             string xml = "<order >" +
                             "<item price='150'>Motor</item>" +
                             "<item price='50'>Cable</item>" +
@@ -1709,7 +1812,8 @@ namespace SampleQueries {
         [Category("Misc")]
         [Title("Check if an element has attributes")]
         [Description("Check if an element has attributes")]
-        public void XLinq92() {
+        public void XLinq92()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             XElement e = doc.Element("Root")
                             .Element("Customers");
@@ -1720,7 +1824,8 @@ namespace SampleQueries {
         [Category("Misc")]
         [Title("Check if an element has element children")]
         [Description("Check if an element has element children")]
-        public void XLinq93() {
+        public void XLinq93()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             XElement e = doc.Element("Root")
                             .Element("Customers");
@@ -1731,7 +1836,8 @@ namespace SampleQueries {
         [Category("Misc")]
         [Title("Check if an element is empty")]
         [Description("Check if an element is empty")]
-        public void XLinq94() {
+        public void XLinq94()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             XElement e = doc.Element("Root")
                             .Element("Customers");
@@ -1742,7 +1848,8 @@ namespace SampleQueries {
         [Category("Misc")]
         [Title("Get the name of an element")]
         [Description("Get the name of an element")]
-        public void XLinq95() {
+        public void XLinq95()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             XElement e = doc.Elements()
                             .First();
@@ -1752,7 +1859,8 @@ namespace SampleQueries {
         [Category("Misc")]
         [Title("Get the name of an attribute")]
         [Description("Get the name of an attribute")]
-        public void XLinq96() {
+        public void XLinq96()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             XAttribute a = doc.Element("Root")
                               .Element("Customers")
@@ -1763,7 +1871,8 @@ namespace SampleQueries {
         [Category("Misc")]
         [Title("Get the XML declaration")]
         [Description("Get the XML declaration")]
-        public void XLinq97() {
+        public void XLinq97()
+        {
             XDocument doc = XDocument.Load(dataPath + "config.xml");
             Console.WriteLine("Version {0}", doc.Declaration.Version);
             Console.WriteLine("Encoding {0}", doc.Declaration.Encoding);
@@ -1774,7 +1883,8 @@ namespace SampleQueries {
         [Category("Misc")]
         [Title("Find the type of the node")]
         [Description("Find the type of the node")]
-        public void XLinq98() {
+        public void XLinq98()
+        {
             XNode o = new XElement("foo");
             Console.WriteLine(o.NodeType);
         }
@@ -1783,7 +1893,8 @@ namespace SampleQueries {
         [Title("Verify phone numbers")]
         [Description("Verify that the phone numbers of the format xxx-xxx-xxxx")]
         [LinkedMethod("CheckPhone")]
-        public void XLinq99() {
+        public void XLinq99()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
             var query =
                 from customer in doc.Descendants("Customers")
@@ -1796,7 +1907,8 @@ namespace SampleQueries {
                 Console.WriteLine(result);
 
         }
-        static XElement CheckPhone(string phone) {
+        static XElement CheckPhone(string phone)
+        {
             Regex regex = new Regex("([0-9]{3}-)|('('[0-9]{3}')')[0-9]{3}-[0-9]{4}");
             return new XElement("isValidPhone", regex.IsMatch(phone));
         }
@@ -1805,9 +1917,11 @@ namespace SampleQueries {
         [Title("Quick validation")]
         [Description("Validate file structure")]
         [LinkedMethod("VerifyCustomer")]
-        public void XLinq100() {
+        public void XLinq100()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_customers.xml");
-            foreach (XElement customer in doc.Descendants("Customers")) {
+            foreach (XElement customer in doc.Descendants("Customers"))
+            {
                 string err = VerifyCustomer(customer);
                 if (err != "")
                     Console.WriteLine("Cusotmer {0} is invalid. Missing {1}",
@@ -1815,7 +1929,8 @@ namespace SampleQueries {
             }
 
         }
-        static string VerifyCustomer(XElement c) {
+        static string VerifyCustomer(XElement c)
+        {
             if (c.Element("CompanyName") == null)
                 return "CompanyName";
             if (c.Element("ContactName") == null)
@@ -1835,7 +1950,8 @@ namespace SampleQueries {
         [Category("Misc")]
         [Title("Aggregate functions")]
         [Description("Calculate sum, average, min, max of freight of all orders")]
-        public void XLinq101() {
+        public void XLinq101()
+        {
             XDocument doc = XDocument.Load(dataPath + "nw_orders.xml");
             var query =
                 from
@@ -1861,7 +1977,8 @@ namespace SampleQueries {
         [Description("Attach event listners to the root element and add/remove child element")]
         [LinkedMethod("OnChanging")]
         [LinkedMethod("OnChanged")]
-        public void XLinq102() {
+        public void XLinq102()
+        {
             string xml = "<order >" +
                             "<item price='150'>Motor</item>" +
                             "<item price='50'>Cable</item>" +
@@ -1894,7 +2011,8 @@ namespace SampleQueries {
         [Description("Attach event listners to the root element and change the element name/value")]
         [LinkedMethod("OnChanging")]
         [LinkedMethod("OnChanged")]
-        public void XLinq103() {
+        public void XLinq103()
+        {
             string xml = "<order >" +
                             "<item price='150'>Motor</item>" +
                             "<item price='50'>Cable</item>" +
@@ -1920,7 +2038,8 @@ namespace SampleQueries {
         [Description("Attach event listners to multiple elements in the tree")]
         [LinkedMethod("OnChanging")]
         [LinkedMethod("OnChanged")]
-        public void XLinq104() {
+        public void XLinq104()
+        {
             string xml = "<order >" +
                             "<item price='150'>Motor</item>" +
                             "<item price='50'>Cable</item>" +
@@ -1945,14 +2064,16 @@ namespace SampleQueries {
             Console.WriteLine("{0}", order.ToString(SaveOptions.None));
         }
 
-        public void OnChanging(object sender, XObjectChangeEventArgs e) {
+        public void OnChanging(object sender, XObjectChangeEventArgs e)
+        {
             Console.WriteLine();
             Console.WriteLine("OnChanging:");
             Console.WriteLine("EventType: {0}", e.ObjectChange);
             Console.WriteLine("Object: {0}", ((XNode)sender).ToString(SaveOptions.None));
         }
 
-        public void OnChanged(object sender, XObjectChangeEventArgs e) {
+        public void OnChanged(object sender, XObjectChangeEventArgs e)
+        {
             Console.WriteLine();
             Console.WriteLine("OnChanged:");
             Console.WriteLine("EventType: {0}", e.ObjectChange);
@@ -1963,7 +2084,8 @@ namespace SampleQueries {
         [Category("Events")]
         [Title("Orders Log")]
         [Description("Log orders as they are added")]
-        public void XLinq105() {
+        public void XLinq105()
+        {
             string xml = "<order >" +
                             "<item price='150'>Motor</item>" +
                             "<item price='50'>Cable</item>" +
@@ -1976,12 +2098,14 @@ namespace SampleQueries {
             StringWriter log = new StringWriter();
 
             order.Changed += new EventHandler<XObjectChangeEventArgs>(
-                    delegate(object sender, XObjectChangeEventArgs e) {
+                    delegate (object sender, XObjectChangeEventArgs e)
+                    {
                         orderCount++;
                         log.WriteLine(((XNode)sender).ToString(SaveOptions.None));
                     });
 
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 100; i++)
+            {
                 order.Add(new XElement("item", new XAttribute("price", 350), "Printer"));
             }
 
