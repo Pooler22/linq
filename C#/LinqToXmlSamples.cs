@@ -41,8 +41,16 @@ namespace SampleQueries
         [Description("miasta wraz z liczbą klientów w kolejności malejące")]
         public void XLinqP2()
         {
-            var doc = XDocument.Load(dataPath + "bib.xml");
-            Console.WriteLine(doc);
+            var customers = XDocument.Load(dataPath + "Customers.xml");
+            
+            foreach (var result in from customer in customers.Descendants("customers").Descendants("customer")
+                                   group customer by customer.Element("city")?.Value
+                                   into g
+                                   orderby g.Count() descending
+                                   select new { city = g.Key, count=g.Count()})
+            {
+                Console.WriteLine(result);
+            }
         }
 
         [Category("Load")]

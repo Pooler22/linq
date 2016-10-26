@@ -17,3 +17,9 @@ C:\Users\student\Desktop\Nowy folder\C#\obj\Debug\SampleSupport.SampleForm.resou
 C:\Users\student\Desktop\Nowy folder\C#\obj\Debug\SampleQueries.csproj.GenerateResource.Cache
 C:\Users\pooler\Source\Repos\linq\C#\obj\Debug\SampleQueries.exe
 C:\Users\pooler\Source\Repos\linq\C#\obj\Debug\SampleQueries.pdb
+C:\Users\pooler\Source\Repos\linq\C#\bin\Debug\SampleQueries.exe
+C:\Users\pooler\Source\Repos\linq\C#\bin\Debug\SampleQueries.pdb
+C:\Users\pooler\Source\Repos\linq\C#\obj\Debug\SampleQueries.csprojResolveAssemblyReference.cache
+C:\Users\pooler\Source\Repos\linq\C#\obj\Debug\QuerySamples.Properties.Resources.resources
+C:\Users\pooler\Source\Repos\linq\C#\obj\Debug\SampleSupport.SampleForm.resources
+C:\Users\pooler\Source\Repos\linq\C#\obj\Debug\SampleQueries.csproj.GenerateResource.Cache

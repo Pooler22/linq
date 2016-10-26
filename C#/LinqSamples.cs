@@ -151,6 +151,24 @@ namespace SampleQueries
             }
         }
 
+        [Category("Lab1")]
+        [Title("3.1")]
+        [Description("* W dziale LINQ to Objects napisz zapytanie zwracające liczby pierwsze z zakresu od 1 do 888. (WSKAZÓWKA: użyj metody Enumerable.Range(...)) ")]
+        public void LinqP5()
+        {
+            foreach (var i in Enumerable.Range(3, 888).Where(y => Enumerable.Range(2, y-1).All(x => y%x != 0.0)))
+            {
+                Console.WriteLine(i);
+            }
+            //foreach (var x in from number in Enumerable.Range(3,100) 
+            //                  from number1 in Enumerable.Range(2, number-1)
+            //                  where Math.Abs(number / number1) != 0.0 
+            //                  select number)
+            //{
+            //    Console.WriteLine(x);
+            //}
+        }
+
         [Category("Restriction Operators")]
         [Title("Where - Simple 2")]
         [Description("This sample uses the where clause to find all products that are out of stock.")]
