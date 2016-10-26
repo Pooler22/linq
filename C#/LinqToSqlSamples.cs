@@ -30,6 +30,7 @@ namespace SampleQueries {
         private readonly static string dbPath = Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\..\Data\NORTHWND.MDF"));
         private readonly static string sqlServerInstance = @".\SQLEXPRESS";
         private readonly static string connString = "AttachDBFileName='" + dbPath + "';Server='" + sqlServerInstance + "';user instance=true;Integrated Security=SSPI;Connection Timeout=60";
+//        private readonly static string connString = @"Server=(LocalDB)\v11.0;Integrated Security=true;AttachDBFileName='" + dbPath + "'";
 
         private Northwind db;
 

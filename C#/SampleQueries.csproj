@@ -70,6 +70,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data.cs" />
     <Compile Include="DataSetLinqSamples.cs">
     </Compile>
     <Compile Include="EmployeeDataSet.Designer.cs">
@@ -85,6 +86,7 @@
     <Compile Include="NorthwindExtended.cs" />
     <Compile Include="NorthwindMapped.cs" />
     <Compile Include="ObjectDumper.cs" />
+    <Compile Include="Product.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
