@@ -163,6 +163,153 @@ namespace SampleQueries
         }
 
 
+
+        [Category("Lab2")]
+        [Title("3.2 1")]
+        [Description("Znaleźć nazwy produktów, które są na stanie, kosztują mniej niż 10 i należą do kategorii Seafood.")]
+        public void LinqP7()
+        {
+            var products = GetProductList();
+            
+            //v1
+            var result1 = products.Where(p=>p.UnitPrice < 10 && p.UnitsInStock != 0 && p.Category == "Seafood").Select(p => p.ProductName);
+            Console.WriteLine(Stopwatch.TestTime(result1, 10));
+
+            //v2
+            var result2 = products.Where(p => p.UnitPrice < 10 && p.UnitsInStock != 0 && p.Category == "Seafood").Select(p => p.ProductName).ToList();
+            Console.WriteLine(Stopwatch.TestTime(result2, 10));
+
+            //v3 = win
+            const int x2 = 10;
+            const string category1 = "Seafood";
+            var result3 = products.Where(p => p.UnitPrice < x2 && p.UnitsInStock != 0 && p.Category == category1).Select(p => p.ProductName).ToList();
+            Console.WriteLine(Stopwatch.TestTime(result3, 10));
+
+            foreach (var element in result3)
+            {
+                Console.WriteLine(element);
+            }
+        }
+
+        [Category("Lab2")]
+        [Title("3.2 1")]
+        [Description("Dla każdej kategorii znaleźć najtańsze i najdroższe produkty. Zwrócić nazwy kategorii i nazwy produktów. * Napisz zapytanie o złożoności lepszej niż O(k * log(k) * n * n), gdzie n odnosi się do liczby produktów, a k do kategorii.")]
+        public void LinqP8()
+        {
+            var products = GetProductList();
+
+            //v1
+            var result1 = products.Where(p => p.UnitPrice < 10 && p.UnitsInStock != 0 && p.Category == "Seafood").Select(p => p.ProductName);
+            Console.WriteLine(Stopwatch.TestTime(result1, 10));
+            
+            foreach (var element in result1)
+            {
+                Console.WriteLine(element);
+            }
+        }
+
+        [Category("Lab2")]
+        [Title("3.2 1")]
+        [Description("Znaleźć cenę, dla której jest najwięcej sztuk produktów (biorąc pod uwagę też unitInStocks). Zwrócić cenę i liczbę sztuk.")]
+        public void LinqP9()
+        {
+            var products = GetProductList();
+
+            //v1
+            var result1 = products.Where(p => p.UnitPrice < 10 && p.UnitsInStock != 0 && p.Category == "Seafood").Select(p => p.ProductName);
+            Console.WriteLine(Stopwatch.TestTime(result1, 10));
+
+            foreach (var element in result1)
+            {
+                Console.WriteLine(element);
+            }
+        }
+
+        [Category("Lab2")]
+        [Title("3.2 1")]
+        [Description("Dla każdego produktu podać liczbę produktów, które są od niego tańsze lub jest ich mniej sztuk na składzie.")]
+        public void LinqP10()
+        {
+            var products = GetProductList();
+
+            //v1
+            var result1 = products.Where(p => p.UnitPrice < 10 && p.UnitsInStock != 0 && p.Category == "Seafood").Select(p => p.ProductName);
+            Console.WriteLine(Stopwatch.TestTime(result1, 10));
+
+            foreach (var element in result1)
+            {
+                Console.WriteLine(element);
+            }
+        }
+
+        [Category("Lab2")]
+        [Title("3.2 1")]
+        [Description("Dla każdego produktu podać liczbę produktów, które są od niego tańsze lub jest ich mniej sztuk na składzie.")]
+        public void LinqP11()
+        {
+            var products = GetProductList();
+
+            //v1
+            var result1 = products.Where(p => p.UnitPrice < 10 && p.UnitsInStock != 0 && p.Category == "Seafood").Select(p => p.ProductName);
+            Console.WriteLine(Stopwatch.TestTime(result1, 10));
+
+            foreach (var element in result1)
+            {
+                Console.WriteLine(element);
+            }
+        }
+
+        [Category("Lab2")]
+        [Title("3.2 1")]
+        [Description("Dla każdego produktu podaj liczbę produktów, które kosztują tyle samo. *Napisz zapytanie o złożoności O(n * log(n)).")]
+        public void LinqP12()
+        {
+            var products = GetProductList();
+
+            //v1
+            var result1 = products.Where(p => p.UnitPrice < 10 && p.UnitsInStock != 0 && p.Category == "Seafood").Select(p => p.ProductName);
+            Console.WriteLine(Stopwatch.TestTime(result1, 10));
+
+            foreach (var element in result1)
+            {
+                Console.WriteLine(element);
+            }
+        }
+
+        [Category("Lab2")]
+        [Title("3.2 1")]
+        [Description("Do rozwiązań zastosuj Parallel LINQ i sprawdź poprawę wydajności")]
+        public void LinqP13()
+        {
+            var products = GetProductList();
+
+            //v1
+            var result1 = products.Where(p => p.UnitPrice < 10 && p.UnitsInStock != 0 && p.Category == "Seafood").Select(p => p.ProductName);
+            Console.WriteLine(Stopwatch.TestTime(result1, 10));
+
+            foreach (var element in result1)
+            {
+                Console.WriteLine(element);
+            }
+        }
+
+        [Category("Lab2")]
+        [Title("3.2 1")]
+        [Description("Sprawdź wydajność zapytania z wykładu i poprzedzających laboratoriów: produkty, których cena jednostkowa, jest równa cenie produktu o nazwie Ikura. Spróbuj ją poprawić.")]
+        public void LinqP13()
+        {
+            var products = GetProductList();
+
+            //v1
+            var result1 = products.Where(p => p.UnitPrice < 10 && p.UnitsInStock != 0 && p.Category == "Seafood").Select(p => p.ProductName);
+            Console.WriteLine(Stopwatch.TestTime(result1, 10));
+
+            foreach (var element in result1)
+            {
+                Console.WriteLine(element);
+            }
+        }
+
         [Category("Restriction Operators")]
         [Title("Where - Simple 1")]
         [Description("This sample uses the where clause to find all elements of an array with a value less than 5.")]
