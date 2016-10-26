@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using QuerySamples;
 using SampleSupport;
 
 // Version Mad01
@@ -167,6 +168,23 @@ namespace SampleQueries
             //{
             //    Console.WriteLine(x);
             //}
+        }
+
+        [Category("Lab1")]
+        [Title("3.2")]
+        [Description("średnią cenę produktów w każdej kategorii (użyj group by). ")]
+        public void LinqP6()
+        {
+            var products = GetProductList();
+
+            var result = from product in products
+                group product by product.Category
+                into gr
+                select new {avg = gr.Average(p => p.UnitPrice), name = gr};
+
+            Console.WriteLine(Stopwatch.TestTime(result, 10));
+            Console.WriteLine(Stopwatch.TestTime(result, 20));
+            Console.WriteLine(Stopwatch.TestTime(result, 30));
         }
 
         [Category("Restriction Operators")]

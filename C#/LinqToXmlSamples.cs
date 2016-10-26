@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
+using QuerySamples;
 
 namespace SampleQueries
 {
@@ -51,6 +52,25 @@ namespace SampleQueries
             {
                 Console.WriteLine(result);
             }
+        }
+
+        [Category("Lab1")]
+        [Title("3.2")]
+        [Description("Proste testowanie wydajności zapytań")]
+        public void XLinqP6()
+        {
+            var customers = XDocument.Load(dataPath + "Customers.xml");
+
+            var result = from customer in customers.Descendants("customers").Descendants("customer")
+                group customer by customer.Element("city")?.Value
+                into g
+                orderby g.Count() descending
+                select new {city = g.Key, count = g.Count()};
+
+            Console.WriteLine(Stopwatch.TestTime(result, 10));
+            Console.WriteLine(Stopwatch.TestTime(result, 20));
+            Console.WriteLine(Stopwatch.TestTime(result, 30));
+            
         }
 
         [Category("Load")]
