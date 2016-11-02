@@ -30,3 +30,11 @@ C:\Users\student\Desktop\LINQ\linq\C#\obj\Debug\SampleSupport.SampleForm.resourc
 C:\Users\student\Desktop\LINQ\linq\C#\obj\Debug\SampleQueries.csproj.GenerateResource.Cache
 C:\Users\student\Desktop\LINQ\linq\C#\obj\Debug\SampleQueries.exe
 C:\Users\student\Desktop\LINQ\linq\C#\obj\Debug\SampleQueries.pdb
+C:\Users\student\Source\Repos\linq\C#\obj\Debug\SampleQueries.exe
+C:\Users\student\Source\Repos\linq\C#\obj\Debug\SampleQueries.pdb
+C:\Users\student\Source\Repos\linq\C#\bin\Debug\SampleQueries.exe
+C:\Users\student\Source\Repos\linq\C#\bin\Debug\SampleQueries.pdb
+C:\Users\student\Source\Repos\linq\C#\obj\Debug\SampleQueries.csprojResolveAssemblyReference.cache
+C:\Users\student\Source\Repos\linq\C#\obj\Debug\QuerySamples.Properties.Resources.resources
+C:\Users\student\Source\Repos\linq\C#\obj\Debug\SampleSupport.SampleForm.resources
+C:\Users\student\Source\Repos\linq\C#\obj\Debug\SampleQueries.csproj.GenerateResource.Cache

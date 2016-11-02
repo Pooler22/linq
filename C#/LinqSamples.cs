@@ -174,14 +174,14 @@ namespace SampleQueries
             var result1 = products.Where(p=>p.UnitPrice < 10 && p.UnitsInStock != 0 && p.Category == "Seafood").Select(p => p.ProductName);
             Console.WriteLine(Stopwatch.TestTime(result1, 10));
 
-            //v2
-            var result2 = products.Where(p => p.UnitPrice < 10 && p.UnitsInStock != 0 && p.Category == "Seafood").Select(p => p.ProductName).ToList();
+            //v2 = win
+            var result2 = products.Where(p => p.UnitPrice < 10 && p.UnitsInStock != 0 && p.Category == "Seafood").Select(p => p.ProductName);
             Console.WriteLine(Stopwatch.TestTime(result2, 10));
 
             //v3 = win
             const int x2 = 10;
             const string category1 = "Seafood";
-            var result3 = products.Where(p => p.UnitPrice < x2 && p.UnitsInStock != 0 && p.Category == category1).Select(p => p.ProductName).ToList();
+            var result3 = products.Where(p => p.UnitPrice < x2 && p.UnitsInStock != 0 && p.Category == category1).Select(p => p.ProductName);
             Console.WriteLine(Stopwatch.TestTime(result3, 10));
 
             foreach (var element in result3)
@@ -196,22 +196,46 @@ namespace SampleQueries
         public void LinqP8()
         {
             var products = GetProductList();
-            
-            //v1
+
             var categories = products.GroupBy(x => x.Category,x=>new {x.ProductName, x.UnitPrice} );
+            
+            ////v1
+            //foreach (var category in categories)
+            //{
+            //    Console.WriteLine(category.Key);
+            //    var min = category.Min(x => x.UnitPrice);
+            //    var max = category.Max(x => x.UnitPrice);
+            //    var allMin = category.Where(x => Math.Abs(x.UnitPrice - min) < 0.01).Select(x => new {x.ProductName, x.UnitPrice});
+            //    var allMax = category.Where(x => Math.Abs(x.UnitPrice - max) < 0.01).Select(x => new { x.ProductName, x.UnitPrice });
 
-            foreach (var category in categories)
+            //    foreach (var name in allMin)
+            //        Console.WriteLine(name.ProductName + ' ' + name.UnitPrice);
+            //    foreach (var name in allMax)
+            //        Console.WriteLine(name.ProductName + ' ' + name.UnitPrice);
+            //}
+
+            //v2
+            var allMinV2 = categories.Select(category => category.Where(x => Math.Abs(x.UnitPrice - category.Min(y => y.UnitPrice)) < 0.01).Select(x => x.ProductName));
+            var allMaxV2 = categories.Select(category => category.Where(x => Math.Abs(x.UnitPrice - category.Min(y => y.UnitPrice)) < 0.01).Select(x => x.ProductName));
+
+            var resultTime1 = Stopwatch.TestTime(allMinV2, 10);
+            var resultTime2 = Stopwatch.TestTime(allMaxV2, 10);
+
+            Console.WriteLine(resultTime1 + " + " + resultTime2 + " " + (resultTime1+ resultTime2));
+
+            foreach ( var x in allMinV2.ToList())
             {
-                Console.WriteLine(category.Key);
-                var min = category.Min(x => x.UnitPrice);
-                var max = category.Max(x => x.UnitPrice);
-                var allMin = category.Where(x => Math.Abs(x.UnitPrice - min) < 0.01).Select(x => new {x.ProductName, x.UnitPrice});
-                var allMax = category.Where(x => Math.Abs(x.UnitPrice - max) < 0.01).Select(x => new { x.ProductName, x.UnitPrice });
-
-                foreach (var name in allMin)
-                    Console.WriteLine(name.ProductName + ' ' + name.UnitPrice);
-                foreach (var name in allMax)
-                    Console.WriteLine(name.ProductName + ' ' + name.UnitPrice);
+                foreach (var y in x)
+                {
+                    Console.WriteLine("Min: " + y);
+                }
+            }
+            foreach (var x in allMaxV2)
+            {
+                foreach (var y in x)
+                {
+                    Console.WriteLine("Max: " + y);
+                }
             }
         }
 
@@ -221,16 +245,15 @@ namespace SampleQueries
         public void LinqP9()
         {
             var products = GetProductList();
-            var groupedProducts =  products.GroupBy(x => x.UnitPrice, x => x.UnitsInStock);
-//            groupedProducts.Sum(x=>x.)
-            //v1
-            //var result1 = products.Where(p => p.UnitPrice < 10 && p.UnitsInStock != 0 && p.Category == "Seafood").Select(p => p.ProductName);
-            //Console.WriteLine(Stopwatch.TestTime(result1, 10));
 
-            //foreach (var element in result1)
+            var groupedProducts = products.GroupBy(x => x.UnitPrice).Select(a=> new { Price = a.Key, Count = a.Sum(y=>y.UnitsInStock) }).Aggregate((a,b)=>a.Count > b.Count ? a : b);
+            //foreach(var a in groupedProducts)
             //{
-            //    Console.WriteLine(element);
+            //    Console.WriteLine("Cena " + );
             //}
+
+            Console.WriteLine(groupedProducts.Price + " " +  groupedProducts.Count);
+
         }
 
         [Category("Lab2")]
