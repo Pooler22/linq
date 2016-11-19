@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace QuerySamples
@@ -9,24 +8,26 @@ namespace QuerySamples
     {
         public Stopwatch()
         {
-            TestTime(Enumerable.Range(1, 10).Where(x => x/2 == 0) as IEnumerable,10);
+//            TestTime(Enumerable.Range(1, 10).Where(x => x/2 == 0),10);
         }
 
         public static double TestTime(IEnumerable enumerable, int i)
         {
-            var tmp = Enumerable.Range(0, i).Select(x =>new {time = TestTime(enumerable)}).ToArray();
-            return tmp.OrderBy(x => x.time).Skip(tmp.Count() / 2).First().time;
+            var tmp = Enumerable.Range(0, i).Select(x => TestTime(enumerable));
+            var tmp1 = tmp.OrderBy(x => x).Skip(tmp.Count()/2);
+            return tmp1.First();
         }
 
         public static double TestTime(IEnumerable enumerable)
         {
             var stopwatch = new System.Diagnostics.Stopwatch();
-            //int i = 0;
-
             stopwatch.Start();
-            foreach (var a in enumerable) {
-            //    i++;
+            int i = 0;
+            foreach (var VARIABLE in enumerable)
+            {
+                i++;
             }
+//            var i = enumerable.Cast<object>().Count();
             stopwatch.Stop();
 
             //Console.WriteLine(i);

@@ -6,3 +6,11 @@ C:\Users\student\Source\Repos\linq\C#\obj\Release\SampleQueries.csproj.GenerateR
 C:\Users\student\Source\Repos\linq\C#\obj\Release\SampleQueries.exe
 C:\Users\student\Source\Repos\linq\C#\obj\Release\SampleQueries.pdb
 C:\Users\student\Source\Repos\linq\C#\obj\Release\SampleQueries.csprojResolveAssemblyReference.cache
+C:\Users\pooler\Source\Repos\linq\C#\obj\Release\SampleQueries.exe
+C:\Users\pooler\Source\Repos\linq\C#\obj\Release\SampleQueries.pdb
+C:\Users\pooler\Source\Repos\linq\C#\bin\Release\SampleQueries.exe
+C:\Users\pooler\Source\Repos\linq\C#\bin\Release\SampleQueries.pdb
+C:\Users\pooler\Source\Repos\linq\C#\obj\Release\SampleQueries.csprojResolveAssemblyReference.cache
+C:\Users\pooler\Source\Repos\linq\C#\obj\Release\QuerySamples.Properties.Resources.resources
+C:\Users\pooler\Source\Repos\linq\C#\obj\Release\SampleSupport.SampleForm.resources
+C:\Users\pooler\Source\Repos\linq\C#\obj\Release\SampleQueries.csproj.GenerateResource.Cache

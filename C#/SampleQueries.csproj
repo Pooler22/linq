@@ -78,6 +78,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EmployeeDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Exercises.cs" />
     <Compile Include="LinqSamples.cs" />
     <Compile Include="LinqToSqlSamples.cs" />
     <Compile Include="LinqToXmlSamples.cs" />
