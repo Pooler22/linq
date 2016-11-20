@@ -120,16 +120,16 @@ namespace QuerySamples
                     .Select(p => p.ProductName);
             Console.WriteLine("V1 " + Stopwatch.TestTime(result, 10));
             Console.WriteLine("V1 Parallel " + Stopwatch.TestTime(result.AsParallel(), 10));
-            //V1 			0,1981 ms
-            //V1 Parallel   0,1952 ms
+            //V1 			0,1543 ms
+            //V1 Parallel   0,1551 ms
 
             var result2 =
                 products.Where(p => (p.UnitPrice < 10) && p.Category.Equals(category1) && (p.UnitsInStock != 0))
                     .Select(p => p.ProductName);
             Console.WriteLine("V2 " + Stopwatch.TestTime(result2, 10));
             Console.WriteLine("V2 Parallel " + Stopwatch.TestTime(result2.AsParallel(), 10));
-            //V2 			0,1948 ms
-            //V2 Parallel   0,1981 ms
+            //V2 			0,1725 ms
+            //V2 Parallel   0,1474 ms
         }
 
         [Category("Lab2")]
@@ -156,10 +156,10 @@ namespace QuerySamples
                         .Select(x => x.ProductName));
             Console.WriteLine("V1 " + Stopwatch.TestTime(result1, 10));
             Console.WriteLine("V1 Parallel " + Stopwatch.TestTime(result1P, 10));
-            //V1 			1,202  ms
-            //V1 Parallel   2,0654 ms
+            //V1 			0,9662  ms
+            //V1 Parallel   2,7801 ms
 
-                                    var result2 =
+            var result2 =
                 products.GroupBy(x => x.Category, x => new {x.ProductName, x.UnitPrice})
                     .Select(c => new {c, Min = c.Min(p => p.UnitPrice), Max = c.Max(p => p.UnitPrice)})
                     .Select(
@@ -168,7 +168,7 @@ namespace QuerySamples
                                 .Select(b => new {b.ProductName, y.c.Key}));
 
             var result2P =
-                products.AsParallel().GroupBy(x => x.Category).AsParallel()
+                products.AsParallel().GroupBy(x => x.Category)
                     .Select(c => new {c, Min = c.Min(p => p.UnitPrice), Max = c.Max(p => p.UnitPrice)})
                     .Select(
                         y =>
@@ -176,8 +176,8 @@ namespace QuerySamples
                                 .Select(b => new {b.ProductName, y.c.Key}));
             Console.WriteLine("V2 " + Stopwatch.TestTime(result2, 10));
             Console.WriteLine("V2 Parallel " + Stopwatch.TestTime(result2P, 10));
-            //V2 			1,6704 ms
-            //V2 Parallel   3,0734 ms
+            //V2 			2,0666 ms
+            //V2 Parallel   4,378 ms
 
         }
 
@@ -208,7 +208,7 @@ namespace QuerySamples
             var result1P = sum1P.Where(x => x.suma == sum1P.Max(z => z.suma)).Select(x => new { x.suma, x.key });
             Console.WriteLine(Stopwatch.TestTime(result1, 2));
             Console.WriteLine(Stopwatch.TestTime(result1P, 2));
-            //V1 			31051,4565 ms
+            //V1 			22893,8161 ms
             //V1 Parallel   29684,3327 ms
         }
 
@@ -229,8 +229,8 @@ namespace QuerySamples
                     .Select(p => products.Count(e => (e.UnitPrice < p.UnitPrice) || (e.UnitsInStock < p.UnitPrice)));
             Console.WriteLine(Stopwatch.TestTime(result1, 10));
             Console.WriteLine(Stopwatch.TestTime(result2, 10));
-            //V1 			4687,5516 ms
-            //V1 Parallel   1877,3146 ms
+            //V1 			3992,2704 ms
+            //V1 Parallel   2109,6252 ms
         }
 
         [Category("Lab2")]
@@ -270,16 +270,18 @@ namespace QuerySamples
             //                  select new { product.ProductName, product.UnitPrice })
             //    Console.WriteLine(x);
 
-            var IKURA = "IKURA";
-            var result1 = products.Where(x => x.ProductName.Equals(IKURA)).Select(x => x.UnitPrice);
+            const string ikura = "Ikura";
+            var result1 = products.Where(x => x.ProductName.Equals(ikura)).Select(x => x.UnitPrice);
             var result11 = products.Where(x => result1.Contains(x.UnitPrice));
             
-            var result1P = products.AsParallel().Where(x => x.ProductName.Equals(IKURA)).Select(x => x.UnitPrice);
-            var result11P = products.Where(x => result1P.Contains(x.UnitPrice));
+            var result1P = products.AsParallel().Where(x => x.ProductName.Equals(ikura)).Select(x => x.UnitPrice);
+            var result11P = products.AsParallel().Where(x => result1P.Contains(x.UnitPrice));
             Console.WriteLine(Stopwatch.TestTime(result11, 2));
             Console.WriteLine(Stopwatch.TestTime(result11P, 2));
             //V1			2185,8099 ms
             //V1 Parallel   4607,8077 ms
         }
+
+
     }
 }
